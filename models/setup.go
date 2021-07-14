@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+
+	"github.com/willlaiwk/go-todo-api/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -8,8 +11,18 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
+
+	connectionString := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		config.DB.User,
+		config.DB.Password,
+		config.DB.Host,
+		config.DB.Port,
+		config.DB.Name,
+	)
+
 	db, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: "todo:todo123@tcp(127.0.0.1:33306)/todo?charset=utf8&parseTime=True&loc=Local",
+		DSN: connectionString,
 	}), &gorm.Config{})
 
 	if err != nil {
